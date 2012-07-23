@@ -81,13 +81,7 @@ package
 			
 			var result:CSG = csg1.subtract(csg2);
 			
-			var meshes:Vector.<Mesh> = AwayCSG.toMeshes(result);
-			
-			_mesh = new ObjectContainer3D();
-			
-			for each (var mesh:Mesh in meshes) {
-				_mesh.addChild(mesh);
-			}
+			_mesh = AwayCSG.toMesh(result);
 			
 			_view.scene.addChild(_mesh);
 		}

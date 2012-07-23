@@ -2,6 +2,7 @@ package away.csg
 {
 	import away3d.core.base.Geometry;
 	import away3d.core.base.SubGeometry;
+	import away3d.core.base.SubMesh;
 	import away3d.entities.Mesh;
 	import away3d.materials.MaterialBase;
 	import away3d.materials.utils.MultipleMaterials;
@@ -81,11 +82,11 @@ package away.csg
 			return polygons;
 		}
 		
-		public static function toMeshes(csg:CSG):Vector.<Mesh>
+		public static function toMesh(csg:CSG):Mesh
 		{
 			var polygons:Vector.<Polygon> = csg.toPolygons(),
 				byMaterial:Dictionary = new Dictionary(),
-				meshes:Vector.<Mesh> = new Vector.<Mesh>();
+				mesh:Mesh = null;
 
 			for each (var polygon:Polygon in polygons) {
 				var subGeometry:SubGeometry = toSubGeometry(polygon);
@@ -103,12 +104,18 @@ package away.csg
 					subGeometries:Array = byMaterial[key];
 				
 				for each (var sub:SubGeometry in subGeometries) {
-					geometry.addSubGeometry(sub);
+					if (mesh) {
+						mesh.subMeshes.push(new SubMesh(sub, mesh, material));
+					} else {
+						geometry.addSubGeometry(sub);
+					}
 				}
 				
-				meshes.push(new Mesh(geometry, material));
+				if (!mesh) {
+					mesh = new Mesh(geometry, material);
+				}
 			}
-			return meshes;
+			return mesh;
 		}
 		
 		/**

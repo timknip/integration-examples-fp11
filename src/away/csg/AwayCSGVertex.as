@@ -35,7 +35,7 @@ package away.csg
 		}
 		public function set uv(value:Vector3D):void
 		{
-			
+			_uv = value;
 		}
 	}
 }
